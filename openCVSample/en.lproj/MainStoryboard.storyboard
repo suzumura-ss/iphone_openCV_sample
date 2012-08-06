@@ -24,19 +24,30 @@
                                             <action selector="loadImage:" destination="2" id="NhG-HI-mvC"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="info" id="lLy-tC-JDi">
+                                    <barButtonItem title="i" id="lLy-tC-JDi">
                                         <connections>
                                             <action selector="imageInfo:" destination="2" id="PBd-fs-MdT"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem title="cv::gauss" id="NDp-yX-3MK">
+                                    <barButtonItem title="gaus" id="NDp-yX-3MK">
                                         <connections>
                                             <action selector="processCvImage:" destination="2" id="rfB-7s-dc7"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem tag="1" title="cv::median" id="Vw6-qK-kVu">
+                                    <barButtonItem tag="1" title="med" id="Vw6-qK-kVu">
                                         <connections>
                                             <action selector="processCvImage:" destination="2" id="dJa-cy-Ytm"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem tag="2" title="box" id="2T1-D1-YEJ">
+                                        <connections>
+                                            <action selector="processCvImage:" destination="2" id="Zsc-Y7-iC0"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="xRx-0a-RaN"/>
+                                    <barButtonItem title="S" id="SUu-vb-pEE">
+                                        <connections>
+                                            <action selector="saveImage:" destination="2" id="XnL-ha-0Qd"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -68,18 +79,26 @@
                                 <rect key="frame" x="62" y="205" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="100" id="qxQ-Wq-7ad">
-                                <rect key="frame" x="18" y="364" width="284" height="23"/>
+                            <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="3" minimumValue="3" maximumValue="11" stepValue="2" id="mV1-WJ-6lh">
+                                <rect key="frame" x="206" y="352" width="94" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <action selector="stepperClicked:" destination="2" eventType="touchUpInside" id="4jb-eV-chf"/>
+                                </connections>
+                            </stepper>
+                            <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="THP-n7-kNy">
+                                <rect key="frame" x="20" y="352" width="79" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </slider>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="doBenchmark" destination="THP-n7-kNy" id="8uf-gF-dmC"/>
                         <outlet property="imageView" destination="nAY-JP-lC2" id="2f7-WN-58B"/>
                         <outlet property="indicator" destination="Qxt-ah-31k" id="cUS-rV-gkI"/>
                         <outlet property="prosessing" destination="LKN-oa-Pze" id="H0m-pw-HX9"/>
-                        <outlet property="slider" destination="qxQ-Wq-7ad" id="e3D-jE-5aN"/>
+                        <outlet property="stepper" destination="mV1-WJ-6lh" id="LmQ-A0-R1W"/>
                         <outlet property="textView" destination="ELe-Ld-c6M" id="UpH-hV-mx8"/>
                         <outlet property="toolbar" destination="rge-qH-kcV" id="qmE-Tu-HBt"/>
                     </connections>
@@ -94,10 +113,13 @@
                 <relationship kind="action" name="imageInfo:"/>
                 <relationship kind="action" name="loadImage:"/>
                 <relationship kind="action" name="processCvImage:"/>
+                <relationship kind="action" name="saveImage:"/>
+                <relationship kind="action" name="stepperClicked:"/>
+                <relationship kind="outlet" name="doBenchmark" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="indicator" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="prosessing" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="slider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="stepper" candidateClass="UIStepper"/>
                 <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
             </relationships>

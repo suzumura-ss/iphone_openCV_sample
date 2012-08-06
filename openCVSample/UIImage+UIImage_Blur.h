@@ -11,5 +11,6 @@
 
 - (UIImage*)gaussian:(int)size;
 - (UIImage*)median:(int)size;
+- (UIImage*)box:(int)size;
 
 @end

@@ -12,6 +12,7 @@
 {
     UIImage* _image;
     NSOperationQueue* _queue;
+    NSInteger _filterSize;
 }
 @end
 
@@ -20,10 +21,11 @@
 
 @synthesize imageView = _imageView;
 @synthesize textView = _textView;
-@synthesize slider = _slider;
 @synthesize toolbar = _toolbar;
 @synthesize prosessing = _prosessing;
 @synthesize indicator = _indicator;
+@synthesize stepper = _stepper;
+@synthesize doBenchmark = _doBenchmark;
 
 #pragma mark - Indicator
 
@@ -72,8 +74,8 @@
     }
     size_t width = CGImageGetWidth(cg);
     size_t height = CGImageGetHeight(cg);
-    [self.textView setText:[NSString stringWithFormat:@"colorModel: %d, bitPerPixel: %zu, bitmapInfo: 0x%x, format=%s, %dx%dpx",
-                            colorModel, bitPerPixel, bitmapInfo, formatName, width, height]];
+    [self.textView setText:[NSString stringWithFormat:@"colorModel: %d, bitPerPixel: %zu, bitmapInfo: 0x%x, format=%s, %dx%dpx, filter=%d",
+                            colorModel, bitPerPixel, bitmapInfo, formatName, width, height, _filterSize]];
 
     CFDataRef data = CGDataProviderCopyData(CGImageGetDataProvider(cg));
     CFMutableDataRef bitmap = CFDataCreateMutableCopy(kCFAllocatorDefault, 0, data);
@@ -103,29 +105,35 @@
 - (IBAction)processCvImage:(id)sender
 {
     if (!_image) return;
-    int size = [_slider value];
     UIBarButtonItem* btn = (UIBarButtonItem*)sender;
 
     [self displayIndicator:YES];
 
     __weak ViewController* _self = self;
     UIImage* src = _image;
+    NSInteger size = _filterSize;
+    int count = [_doBenchmark isOn] ? 5: 1;
     [_queue addOperationWithBlock:^{
         const char* type = "";
         NSDate* sd = [NSDate dateWithTimeIntervalSinceNow:0];
         UIImage* image = nil;
-        switch ([btn tag]) {
-            default:
-            case 0:
-                type = "gaussian";
-                image = [src gaussian:size];
-                break;
-            case 1:
-                type = "median";
-                image = [src median:size];
-                break;
+        for (int i=0; i<count; i++) {
+            switch ([btn tag]) {
+                default:
+                case 0:
+                    type = "gaussian";
+                    image = [src gaussian:size];
+                    break;
+                case 1:
+                    type = "median";
+                    image = [src median:size];
+                    break;
+                case 2:
+                    type = "box";
+                    image = [src box:size];
+            }
         }
-        NSTimeInterval lap = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSinceDate:sd];
+        NSTimeInterval lap = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSinceDate:sd] / (NSTimeInterval)count;
         dispatch_async(dispatch_get_main_queue(), ^{
             [_self.imageView setImage:image];
             [_self displayIndicator:NO];
@@ -148,6 +156,11 @@
     }
 }
 
+- (IBAction)saveImage:(id)sender
+{
+    UIImageWriteToSavedPhotosAlbum([_imageView image], nil, nil, nil);
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -165,12 +178,22 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     _queue = [[NSOperationQueue alloc] init];
+    [self stepperClicked:_stepper];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+}
+
+- (IBAction)stepperClicked:(id)sender
+{
+    UIStepper* s = (UIStepper*)sender;
+    NSInteger v = [s value];
+    _filterSize = v*v;
+    if((_filterSize%2)==0) _filterSize+=1;
+    [_textView setText:[NSString stringWithFormat:@"filterSize=%d", _filterSize]];
 }
 
 @end

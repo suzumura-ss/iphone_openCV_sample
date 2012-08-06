@@ -11,13 +11,16 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView* imageView;
 @property (nonatomic, strong) IBOutlet UITextView* textView;
-@property (nonatomic, strong) IBOutlet UISlider* slider;
 @property (nonatomic, strong) IBOutlet UIToolbar* toolbar;
 @property (nonatomic, strong) IBOutlet UIButton* prosessing;
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView* indicator;
+@property (nonatomic, strong) IBOutlet UIStepper* stepper;
+@property (nonatomic, strong) IBOutlet UISwitch* doBenchmark;
 
 - (IBAction)loadImage:(id)sender;
 - (IBAction)imageInfo:(id)sender;
 - (IBAction)processCvImage:(id)sender;
+- (IBAction)saveImage:(id)sender;
+- (IBAction)stepperClicked:(id)sender;
 
 @end
