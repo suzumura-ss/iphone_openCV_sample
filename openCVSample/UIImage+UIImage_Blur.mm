@@ -61,7 +61,7 @@ using namespace cv;
     
     Mat src = [self wrappedImageSetup:size], dst;
     
-    cv::GaussianBlur(src, dst, cv::Size(size, size), size/2);
+    cv::GaussianBlur(src, dst, cv::Size(size, size), 0);
     
     return [self clipResult:dst size:size];
 }
